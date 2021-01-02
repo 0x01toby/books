@@ -6,19 +6,22 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="Description">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <link rel="icon" href="https://cdn.taozhang.net.cn/usr/themes/single/img/icon.png" sizes="192x192"/>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify/lib/themes/vue.css">
 </head>
 <body>
   <div id="app"></div>
   <script>
     window.$docsify = {
-      name: 'Learning',
-      repo: 'https://github.com/vx610sky/books',
-      loadNavbar: true,
+      name: 'Learning k8s',
+      themeColor: '#3F51B5',
+      loadNavbar: true, // 导航栏
       loadSidebar: true, // 加载自定义侧边栏
-      maxLevel: 2, // 默认情况下会抓取文档中所有标题渲染成目录，可配置最大支持渲染的标题层级。
+      //autoHeader: true, // 可以根据 _sidebar.md 的内容自动为每个页面增加标题
+      maxLevel: 6, // 默认情况下会抓取文档中所有标题渲染成目录，可配置最大支持渲染的标题层级。
       subMaxLevel: 4, // 生成目录的最大层级
       mergeNavbar: true, // 小屏设备下合并导航栏到侧边栏
+      routerMode: 'hash', // default: 'hash'
       alias: { // 定义路由别名，可以更自由的定义路由规则。 支持正则
         '/.*/_sidebar.md': '/_sidebar.md', // 侧边栏
         '/.*/_navbar.md': '/_navbar.md', // 导航栏
@@ -27,7 +30,22 @@
         placeholder: '搜索',
         noData: '找不到结果!',
         depth: 3
-      }
+      },
+      requestHeaders: {
+        'cache-control': 'max-age=600',
+      },
+      plugins: [
+        function(hook) {                  
+            //插件开发：https://docsify.js.org/#/zh-cn/write-a-plugin
+            hook.doneEach(function () {
+              var _main = document.getElementById("main");
+              let footer = document.createElement("footer");
+              footer.innerHTML = '<footer style="text-align: center;"><hr />© 2021 张涛的个人网站. &nbsp;&nbsp;鄂ICP备20009783号-1</footer>';
+              _main.appendChild(footer);              
+
+            })
+        }
+      ]  
     }
   </script>
   <!-- Docsify v4 -->
@@ -36,5 +54,6 @@
   <script src="//unpkg.com/prismjs/components/prism-java.js"></script>
   <script src="//unpkg.com/prismjs/components/prism-sql.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
 </body>
 </html>

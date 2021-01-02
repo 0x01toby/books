@@ -1,0 +1,15 @@
+version: '3'
+services:
+  typecho:
+    image: mybooks:v2
+    container_name: books
+    restart: always
+    networks:
+      - books
+    ports:
+      - 83000:3000
+      - 35729:35729
+    volumes:
+      - ./../:/data/docsify
+networks:
+  books:

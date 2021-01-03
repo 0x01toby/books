@@ -5,6 +5,10 @@
 
 ![alt "节点资源说明"](images/20210102232906.png)
 
+## 高可用架构图
+
+![alt k8s高可用](images/20210103131326.png)
+
 ## 配置keepalived 
 
 在master01/master02/master03上安装keepalived, 设置master02的权重为100, 其他master为90. vip 为172.16.0.32. 当master02宕机时, vip会自动漂移到master01和master03. 
@@ -130,9 +134,10 @@ kind: KubeProxyConfiguration
 mode: ipvs
 EOF
 
-
+# 后面使用cilium替代kube-proxy
 kubeadm init --config "./kubeadm.yaml" \
 --upload-certs \
+--skip-phases=addon/kube-proxy　\
 --ignore-preflight-errors=NumCPU
 
 # 初始化配置相关
@@ -169,4 +174,38 @@ kubeadm join 172.16.0.32:9443 --token 4ugw22.dxxxxxxxxxxxxxxxxxxxxxxx \
     --discovery-token-ca-cert-hash sha256:1c07aa52f97637f2ae46b05b27f978cxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
+
+## 安装helm
+
+```bash
+#!/usr/bin/env bash
+curl -O https://get.helm.sh/helm-v3.4.0-linux-amd64.tar.gz
+tar zxvf helm-v3.4.0-linux-amd64.tar.gz
+cp linux-amd64/helm /usr/local/bin/
+chmod +x /usr/local/bin/helm
+rm -rf linux-amd64
+rm -rf helm-v3.4.0-linux-amd64.tar.gz
+
+helm repo add stable https://charts.helm.sh/stable
+helm plugin install https://github.com/chartmuseum/helm-push.git
+```
+
+## 安装cilium网络插件
+
+```bash
+#!/bin/bash
+helm repo add cilium https://helm.cilium.io/
+helm install cilium cilium/cilium \
+--version 1.9.1 \
+--namespace kube-system \
+--set kubeProxyReplacement=strict \
+--set k8sServiceHost= \ # api server ip
+--set k8sServicePort= \ # api server port
+--set hubble.enabled=true \
+--set hubble.relay.enabled=true \
+--set hubble.ui.enabled=true
+```
+
 ![alt "k8s集群"](images/20210102233833.png)
+
+

@@ -5,23 +5,25 @@
   * [freeipa账号管理](env/freeipa_intro_01.md)
 
 * k8s搭建
-  * [k8s镜像配置](k8s/base_image_intro_01.md)
-  * [k8s集群搭建](k8s/install_intro_01.md)
+  * [k8s基础镜像配置](install_k8s/base_image_intro_01.md)
+  * [k8s高可用集群搭建](install_k8s/install_intro_01.md)
 
 * k8s基础
-  * [架构]()
-  * [Pod 相关]()
+  * [架构](k8s/intro_01.md)
+  * [Pod 相关](k8s/pod_01.md)
   * [控制器]()
   * [配置管理]()
   * [安全]()
   * [网络]()
   * [调度器]()
   * [存储]()
+  * [operator]()
   * [多租户]()
 
 * 统一认证
   * [keycloak 介绍](oauth/keycloak/intro_01.md)
   * [keycloak proxy介绍](oauth/freeipa/intro_01.md)
+  * [启用OTP验证]()
 
 * devops
   * [Gitea 代码托管]()

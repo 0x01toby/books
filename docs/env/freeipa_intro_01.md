@@ -7,28 +7,24 @@ freeipa是为后面k8s集群的各种应用提供统一身份解决方案.
 
 #### centos7配置freeipa
 
+docker部署freeipa
+
 ```bash
-LOCAL_IP=
-DOMAIN=
-MAIN_DOMAIN=
-REALM=
-PASS=
-
-yum install ipa-server -y
-
-echo "${LOCAL_IP} ${MAIN_DOMAIN}.${DOMAIN} ${MAIN_DOMAIN}" >> /etc/hosts
-
-hostnamectl set-hostname  ${MAIN_DOMAIN}.${DOMAIN}
-
-cat > /etc/sysctl.d/close_ipv6.conf <<EOF
-net.ipv6.conf.all.disable_ipv6=0
-EOF
-sysctl net.ipv6.conf.all.disable_ipv6=0
-ipa-server-install -a ${PASS} -p ${PASS} --domain=${DOMAIN} --realm=${REALM}
-
-firewall-cmd --permanent --add-service={ntp,http,https,ldap,ldaps,kerberos,kpasswd}
-firewall-cmd --reload
+ADMIN_PASSWORD=
+DS_PASSWORD=
+docker run -itd \
+--name helloworld \
+--entrypoint /usr/local/sbin/init \
+--hostname="ipa.taozhang.net.cn"  \
+-v /sys/fs/cgroup:/sys/fs/cgroup:ro \
+freeipa/freeipa-server:centos-8-4.8.7 \
+ipa-server-install --unattended \
+--domain=taozhang.net.cn \
+--realm=TAOZHANG.NET.CN \
+--admin-password="${ADMIN_PASSWORD}" \
+--ds-password=${DS_PASSWORD} --no-ntp
 ```
+
 配置完截图:
 
 ![alt "ipa软件"](images/20210102222923.png)

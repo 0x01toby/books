@@ -63,14 +63,23 @@ k8s是什么?
     监听service的变化. Service 有NodePort, LoadBalancer, ClusterIP三种类型. 
   - Endpoints Controller  
     endpoints表示一个service对应的所有POD的访问地址, endpoints controller负责生成和维护endpoints对象. 比如滚动更新的时候, pod的ip不断变化, endpoints controller监听service 和 pod的变化, 最终保证service到pod的映射关系是最新的.
+  - Deployment Controller
+  - ReplicaSet Controller
+  - StatefulSet Controller
+  - DaemonSet Controller
+  - Job Controller
+  - CronJob Controller 
+  - HPA Controller
 
 - kube schedule  
   Schedule负责整个集群的资源调度, 主要是汇总当前集群的资源负载情况, 根据资源负载情况, 将新建的POD分配到合适的节点上. POD分配到节点后, 将POD的信息通过API Server写回etcd. 
 
 - kubelet
-  - kubelet负责容器运行的组件, 负责各个节点上pod的创建, 修改, 监控, 删除(POD的生命周期). 
-  - 定时上报各个节点的状态给API Server
-  - 通过API Server接受Master分配任务, 并执行任务
+  - 通过CRI与Docker进行交互，负责容器运行的组件, 负责各个节点上pod的创建, 修改, 监控, 删除(POD的生命周期)。
+  - 通过CNI调用网络插件为容器配置网络。
+  - 通过CSI调用存储插件为容器配置持久化存储。 
+  - 定时上报各个节点的状态给API Server。
+  - 通过API Server接受Master分配任务, 并执行任务。
 
 - kube-proxy
   每个k8s集群节点上都运行着kube-proxy进程, 负责实现k8s中的service的vip服务. kube-proxy有[三种工作模式](https://www.lagou.com/lgeduarticle/107089.html): User space模式, Iptables 模式, IPVS模式. 

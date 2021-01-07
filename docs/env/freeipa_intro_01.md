@@ -7,7 +7,7 @@ freeipa是为后面k8s集群的各种应用提供统一身份解决方案.
 
 #### centos7配置freeipa
 
-docker部署freeipa, 基本部署完。
+docker部署freeipa。
 
 ```bash
 ADMIN_PASSWORD=

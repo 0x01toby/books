@@ -86,11 +86,8 @@ stream {
 HOST_NAME=master02
 KUBE_LOCAL_IP=xxxxxx
 KUBE_API_PORT=6443
-
-
 # apiserver vip, keepalived的VIP, 端口是nginx的9443端口
 KUBE_API_VIP=xxxxxx:9443
-
 # 安装版本&镜像下载地址
 KUBE_VERSION=v1.19.3
 IMAGE_REPOSITORY=registry.aliyuncs.com/google_containers
@@ -133,13 +130,11 @@ apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
 mode: ipvs
 EOF
-
 # 后面使用cilium替代kube-proxy
 kubeadm init --config "./kubeadm.yaml" \
 --upload-certs \
 --skip-phases=addon/kube-proxy　\
 --ignore-preflight-errors=NumCPU
-
 # 初始化配置相关
 mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -158,6 +153,8 @@ Then you can join any number of worker nodes by running the following on each as
 kubeadm join 172.16.0.32:9443 --token 4ugw22.dxxxxxxxxxxxxxxxxxxxxxxx \
     --discovery-token-ca-cert-hash sha256:1c07aa52f97637f2ae46b05b27f978cxxxxxxxxxxxxxxxxxxxxxxxx
 ```
+
+*controlPlaneEndpoint*: 为高可用集群定义外部负载均衡器(nginx + keepalived).
 
 ## 其他master加入集群
 

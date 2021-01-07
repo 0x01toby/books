@@ -1,8 +1,8 @@
 # keycloak 用户认证
 
-> An awesome project. 1
+> 配置keycloak OICD认证. 
 
-## 配置OTP登录校验 
+## 管理员配置OTP
 
 Manager account > Authenticator 
 
@@ -58,4 +58,9 @@ k8s-openid > Configure > User Federation > Ldap > Ldap Mappers， 创建mappers 
 
 !["同步的组列表"](images/20210107182021.png)
 
-## 配置clients
+## 普通用户配置OTP
+k8s-openid > Configure > Authentication > Flows
+
+![普通用户配置otp](images/20210107220157.png)
+
+设置后, 通过brower的普通用户需要配置otp和验证otp.

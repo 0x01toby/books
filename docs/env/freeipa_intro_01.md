@@ -25,18 +25,16 @@ ipa-server-install --unattended \
 --ds-password=${DS_PASSWORD} --no-ntp
 ```
 
-配置完截图:
 ![alt "ipa软件"](images/20210102222923.png)
 
 #### 开启OTP认证
 
-> /ipa/ui/#/e/otptoken/search > Authentication > OTP Tokens > Add
+/ipa/ui/#/e/otptoken/search > Authentication > OTP Tokens > Add
 
-###### 添加otp配置
+###### 配置OTP
 ![alt "添加otp配置"](images/20210106112006.png)
 
 
 ###### 使用freeotp扫码绑定
-二维码已经打码了。
 
-![alt "扫码"](images/20210106112221.png)
+![alt "扫码"](images/20210106112221.png "二维码已经打码")

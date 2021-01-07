@@ -21,9 +21,9 @@
 
 * 统一认证
   * [freeipa账号管理](env/freeipa_intro_01.md)
-  * [keycloak openid](oauth/keycloak/intro_01.md)
-  * [keycloak proxy](oauth/freeipa/intro_01.md)
-  * [启用OTP验证]()
+  * [keycloak配置](oauth/keycloak/intro_01.md)
+  * [keycloak clients](oauth/keycloak/clients_01.md)
+  * [keycloak proxy](oauth/keycloak/proxy_01.md)
 
 * devops
   * [Gitea 代码托管]()

@@ -4,7 +4,7 @@
 > 所有节点使用统一的镜像. 方便后续快速增加节点.
 
 
-## 基础系统
+## 升级centos7内核
 
 基于centos7系统,升级内核到5.8. 
 
@@ -12,7 +12,7 @@
 #!/bin/bash
 rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
 rpm -Uvh https://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
-yum --enablerepo=elrepo-kernel install -y  kernel-ml-devel kernel-ml
+yum --enablerepo=elrepo-kernel install -y  kernel-ml-devel kernel-ml yum-utils
 grub2-set-default 0
 grub2-mkconfig -o /boot/grub2/grub.cfg
 ```
@@ -22,19 +22,17 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 
 主要是安装kubeadm, kubelet, nfs client, ceph client, docker, 以及一些内核优化.
 
+##### 安装docker 
+
 ```bash
 #!/bin/bash
 
 set -o errexit
-
-## CRI 安装 ###############################################################
 yum-config-manager \
 --add-repo \
 https://download.docker.com/linux/centos/docker-ce.repo
-
 yum update -y && yum install -y --setopt=obsoletes=0 \
 docker-ce
-
 mkdir -p /etc/docker
 cat > /etc/docker/daemon.json <<EOF
 {
@@ -47,21 +45,38 @@ cat > /etc/docker/daemon.json <<EOF
   "storage-opts": [
     "overlay2.override_kernel_check=true"
   ],
-  "registry-mirrors": ["https://eknk9xgk.mirror.aliyuncs.com"]
+  "registry-mirrors": ["https://eknk9xgk.mirror.aliyuncs.com", "https://registry.docker-cn.com"]
 }
 EOF
-
 mkdir -p /etc/systemd/system/docker.service.d
-
 systemctl enable docker.service
 systemctl daemon-reload
 systemctl restart docker
+```
+##### 安装ipvs
 
-### ipvs ###
-
-# docker run -d --restart=always --network=host --name=spug -p 80:80 -v /mydata/:/data registry.aliyuncs.com/openspug/spug
-
+```bash
+#!/bin/bash
+set -o errexit
 yum -y install ipvsadm  ipset
+# 永久生效
+cat > /etc/sysconfig/modules/ipvs.modules <<EOF
+modprobe -- ip_vs
+modprobe -- ip_vs_rr
+modprobe -- ip_vs_wrr
+modprobe -- ip_vs_sh
+modprobe -- nf_conntrack
+EOF
+# modprobe -- nf_conntrack_ipv4
+chmod 755 /etc/sysconfig/modules/ipvs.modules
+bash /etc/sysconfig/modules/ipvs.modules
+```
+
+##### 优化内核
+
+```bash
+#!/bin/bash
+set -o errexit
 
 # 优化kernal
 modprobe br_netfilter
@@ -69,6 +84,7 @@ cat > /etc/sysconfig/modules/br_netfilter.modules << EOF
 modprobe br_netfilter
 EOF
 chmod 755 /etc/sysconfig/modules/br_netfilter.modules
+bash /etc/sysconfig/modules/br_netfilter.modules
 # 禁用ipv6
 cat > /etc/sysctl.d/k8s.conf <<EOF
 net.ipv6.conf.all.disable_ipv6=1
@@ -89,34 +105,6 @@ fs.inotify.max_user_watches = 1048576
 fs.inotify.max_user_instances = 1024
 EOF
 sysctl -p /etc/sysctl.d/k8s.conf
-
-# 永久生效
-cat > /etc/sysconfig/modules/ipvs.modules <<EOF
-modprobe -- ip_vs
-modprobe -- ip_vs_rr
-modprobe -- ip_vs_wrr
-modprobe -- ip_vs_sh
-modprobe -- nf_conntrack
-EOF
-# modprobe -- nf_conntrack_ipv4
-chmod 755 /etc/sysconfig/modules/ipvs.modules
-bash /etc/sysconfig/modules/ipvs.modules
-#lsmod | grep -e ip_vs -e nf_conntrack
-
-## CRI-O install ######################################################################
-cat <<EOF > /etc/yum.repos.d/kubernetes.repo
-[kubernetes]
-name=Kubernetes
-baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
-enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
-EOF
-
-yum install -y kubelet-1.19.3 kubeadm-1.19.3 kubectl-1.19.3 --disableexcludes=kubernetes
-systemctl enable kubelet && systemctl start kubelet
-
 # 优化内核参数
 swapoff -a
 sed -ri 's/.*swap.*/#&/' /etc/fstab
@@ -132,17 +120,36 @@ cat >  /etc/security/limits.conf <<EOF
 * soft memlock unlimited
 * hard memlock unlimited
 EOF
-
 cat >  /etc/systemd/system.conf <<EOF
 DefaultLimitNOFILE=65536
 DefaultLimitNPROC=32000
 DefaultLimitMEMLOCK=infinity
 EOF
 systemctl daemon-reload
+```
+##### 安装kubeadm/kubelet/kubectl
+```bash
+#!/bin/bash
+set -o errexit
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+systemctl enable kubelet && systemctl start kubelet
+```
 
+##### 安装存储插件
+```bash
+#!/bin/bash
+set -o errexit
 # 安装nfs client
 yum install -y nfs-utils
-
 # 安装ceph
 cat > /etc/yum.repos.d/ceph.repo <<EOF
 [Ceph]
@@ -170,11 +177,19 @@ EOF
 yum clean all &&  yum makecache
 # 版本跟 ceph 保持一致
 yum -y install ceph-common-14.2.11
+```
 
+#### 防火墙配置
+k8s搭建在内网可以直接关闭防火墙&selinux.
+```bash
+systemctl stop firewalld
+systemctl disable firewalld
+sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+setenforce 0
 ```
 
 #### 制作基础镜像
 
-上面的系统安装好后, 在pve中将系统转为模板, k8s所有的节点都是基于当前模板配置.
+centos7系统安装好后, 在pve中将系统转为模板, 后面k8s所有的节点都是基于当前模板安装.
 
-![alt "镜像模板"](images/20210102231627.png)
+!["镜像模板"](images/20210102231627.png "基础镜像模板")

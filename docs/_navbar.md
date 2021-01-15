@@ -1,4 +1,4 @@
-* [我的博客](https://www.taozhang.net.cn)
+* [我的博客](https://mylog.taozhang.net.cn)
 
 * 统一认证
   * [keycloak](https://keycloak.taozhang.net.cn)
@@ -19,9 +19,9 @@
   * [grafana](https://grafana.taozhang.net.cn)
 
 * 数据库
-  * [mysql](https://pma.taozhang.net.cn)
-  * [postgres](https://pg.taozhang.net.cn)
-  * redis
+  * [mysql]
+  * [postgres]
+  * [redis]
   
 * 小工具
   * [画图draw](https://draw.taozhang.net.cn)

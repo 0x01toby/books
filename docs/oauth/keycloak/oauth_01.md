@@ -7,7 +7,7 @@ oauth2 proxy组件
 
 ## 对接keycloak
 
-- configmap
+- configmapw
 
 ```yaml
 apiVersion: v1

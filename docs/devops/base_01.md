@@ -30,7 +30,8 @@ Devops环境配置
   ```bash
   #!/bin/bash
   mkdir -p ~/.kube
-  copy ${MASETER} ~/.kube/config
+  # 把master上的kube config复制到当前机器上
+  copy ${MASETER}/.kube/config ~/.kube/config
   chmod 600 ~/.kube/config
   ```
 - 配置helm

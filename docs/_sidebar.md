@@ -28,10 +28,11 @@
 
 * devops
   * [环境配置](devops/base_01.md)
-  * [Gitea 代码托管]
-  * [Harbor 镜像托管]
-  * [Drone CI工具]
-  * [Helm 应用交付]
+  * [Gitea 代码托管](devops/gitea_01.md)
+  * [Harbor 镜像托管](devops/harbor_01.md)
+  * [Drone CI工具](devops/drone_01.md)
+  * [Helm 应用交付](devops/helm_01.md)
+  * [综合应用](devops/devops_01.md)
 
 * 日志监控
   * [prometheus]
@@ -41,8 +42,8 @@
 
 * service mesh
   * [istio]
-  * [jaeger]
   * [kiali]
+  * [jaeger]
 
 * 从0到1微服务案例
   

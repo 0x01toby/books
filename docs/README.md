@@ -31,4 +31,4 @@
 
 #### Service Mesh
 
-> Service Mesh 基于istio解决方案实现, 包括链路追踪和服务网格. 
+> Service Mesh 基于istio解决方案实现, 包括链路追踪, 服务可观测平台以及服务网格. 

@@ -1,4 +1,4 @@
-keycloak对接客户端主要配置
+keycloak对接第三方客户端
 ==========================
 
 ## kuboard dashboard OIDC

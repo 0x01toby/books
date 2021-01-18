@@ -72,3 +72,16 @@ endpoints记录着service(通过label selector匹配)对应所有的pod地址.
 
 ## cilium
   后面重点关注. 
+
+## CoreDNS
+
+CoreDNS 是k8s的一个可选组件，用于k8s集群内的域名解析。在k8s集群中，通过Service Name来访问服务的方式。CoreDNS的作用就是将Service Name解析为Cluster IP. 通过Cluster IP 作为上游POD的负载均衡，把流量分发到各个POD上。
+
+![解析域名](images/20210118112344.png)
+
+![nslooup](images/20210118112848.png)
+- Serivce  
+  nslookup es7-discovery, 最终返回的是ClusterIP, clusterIP具有proxy能力。
+  
+- Headless Service  
+  nslookup master-headless, 最终返回的是3个endpoint地址。这样，客户端可以根据自己的决定选择使用哪个IP。 

@@ -13,21 +13,21 @@
 
 > k8s搭建, 介绍了构建虚拟机的基础镜像(保证所有的节点镜像一致), 以及基于keepalived和nginx(也可以使用lvs或者haproxy)搭建k8s高可用集群. 
 
-#### k8s基础
-
-> k8s基础, 简单介绍了k8s的架构, 以及在日常使用k8s需要使用的知识点. 
-
 #### 统一认证
 
 > 统一认证, 是基于keycloak的OIDC解决方案. 搭建的平台都是基于keycloak实现统一的OIDC认证. 存储账号是使用freeipa解决方案, keycloak与freeipa之间通过ldap进行通信(也可以使用kerberos).
 
-#### devops
+#### DevOps
 
 > devops, 介绍从push代码到git仓库(gitea), 通过webhook触发事件执行CI流水线(drone), 然后打包代码, 构建镜像并推送到harbor仓库, 最后通过helm部署到k8s集群的整个过程. 
 
 #### 日志监控
 
 > 日志监控, 介绍日志收集的解决方案(elk)和集群监控解决方案(thanos, grafana, alertmanager). 
+
+#### k8s基础
+
+> k8s基础, 简单介绍了k8s的架构, 以及在日常使用k8s需要使用的知识点. 
 
 #### Service Mesh
 

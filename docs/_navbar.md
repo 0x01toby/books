@@ -17,11 +17,6 @@
   * [kibana](https://kibana.taozhang.net.cn)
   * [prometheus](https://thanos.taozhang.net.cn)
   * [grafana](https://grafana.taozhang.net.cn)
-
-* 数据库
-  * [mysql]
-  * [postgres]
-  * [redis]
   
 * 小工具
   * [画图draw](https://draw.taozhang.net.cn)

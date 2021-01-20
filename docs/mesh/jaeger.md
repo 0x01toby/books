@@ -30,6 +30,7 @@ kubectl create -f https://www.taozhang.net.cn/mesh/files/jaeger/crd.yaml
 | x-b3-parentid | 追踪树中，父节点的位置|
 | x-b3-smapled | 当采样标志为1时，这个索引将被报告给跟踪系统。一旦采样设置为0或1，相同的值应始终向下游发送。|
 
+![分布式追踪](images/20210119142945.png)
 
 ## 配置SSO
 jaeger是不带认证的，所以需要通过oauth2 proxy来进行认证．　

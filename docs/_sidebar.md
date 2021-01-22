@@ -37,7 +37,7 @@
   * [thanos](monitor/thanos.md)
   * [grafana](monitor/grafana.md)
   * [elasticsearch](monitor/elastic.md)
-  * [fluetd](monitor/fluentd.md)
+  * [fluentd](monitor/fluentd.md)
   * [监控指标]
   * [日志收集]
 

@@ -44,7 +44,7 @@ kubectl -n kube-monitor apply -f https://www.taozhang.net.cn/mesh/files/jaeger/o
 
 ## 与istio结合
 
-jaeger作为istio的addon组件，需要通过指定相应配置，将jager集成到istio中．　
+jaeger作为istio的addon组件，需要通过指定相应配置，将jaeger集成到istio中．　
 ```bash
 istioctl install --set profile=default -y \
 --set meshConfig.defaultConfig.tracing.zipkin.address=jaeger-collector.kube-monitor:9411 \

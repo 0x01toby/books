@@ -24,7 +24,7 @@
 
 ## Dockerfile
 
-也可以直接在[我的代码仓库](https://git.taozhang.net.cn/open/go-micro/src/branch/develop/Dockerfile)看，用于在CI流程中，将源代码build为二进制文件打包为镜像，并推送到harbor平台．　
+也可以直接在[我的代码仓库](https://git.taozhang.net.cn/open/dockerfiles)看，用于在CI流程中，将源代码build为二进制文件打包为镜像，并推送到harbor平台．　
 
 ```yaml
 FROM harbor.taozhang.net.cn/devops/alpine:3.12
@@ -42,7 +42,7 @@ ENTRYPOINT ["./app", "-c", "app.yaml"]
 
 ## .drone.yml文件
 
-可以参考[drone官方文档](https://docs.drone.io/pipeline/kubernetes/syntax/metadata/)，在k8s平台中的语法．我的代码仓库也有我自己写的[drone配置](https://git.taozhang.net.cn/open/go-micro/src/branch/develop/.drone.yml), 也可以参考．下面是流水线四个主要流程：
+可以参考[drone官方文档](https://docs.drone.io/pipeline/kubernetes/syntax/metadata/)，在k8s平台中的语法．我的代码仓库也有我自己写的[drone配置](https://git.taozhang.net.cn/open/demo-go-micro/src/branch/master/.drone.yml), 也可以参考．下面是流水线四个主要流程：
 
 ```yaml
 steps:
